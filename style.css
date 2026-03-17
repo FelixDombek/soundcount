@@ -1,0 +1,480 @@
+/* ===================================================================
+   SoundCount – stylesheet
+   Mobile-first; two-column layout kicks in at 700 px wide.
+=================================================================== */
+
+/* ----- Reset & base --------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html { height: 100%; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               'Helvetica Neue', Arial, sans-serif;
+  background-color: hsl(120, 50%, 38%);
+  color: #fff;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.6s ease;
+  overflow-x: hidden;
+}
+
+/* ----- App shell ------------------------------------------------- */
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ----- Header ---------------------------------------------------- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: rgba(0, 0, 0, 0.18);
+  flex-shrink: 0;
+}
+
+header h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Status indicator */
+#status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  opacity: 0.9;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  flex-shrink: 0;
+}
+
+.status-counting .dot {
+  background: #fff;
+  animation: blink 1s infinite;
+}
+
+.status-recording .dot {
+  background: #ff5555;
+  animation: blink 0.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}
+
+/* ----- Body layout ----------------------------------------------- */
+#body-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Desktop: side-by-side */
+@media (min-width: 700px) {
+  #body-layout {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  #counter-panel {
+    flex: 1;
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  #settings-panel {
+    width: 320px;
+    flex-shrink: 0;
+  }
+}
+
+/* ----- Counter panel --------------------------------------------- */
+#counter-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 28px 20px;
+  gap: 22px;
+}
+
+#counter-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.adjust-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 300;
+  cursor: pointer;
+  transition: background 0.12s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  user-select: none;
+}
+
+.adjust-btn:hover  { background: rgba(255, 255, 255, 0.22); }
+.adjust-btn:active { background: rgba(255, 255, 255, 0.35); transform: scale(0.92); }
+
+#count-display {
+  min-width: 200px;
+  text-align: center;
+}
+
+#count-number {
+  font-size: clamp(90px, 22vw, 150px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.28);
+  display: block;
+}
+
+@media (min-width: 700px) {
+  #count-number {
+    font-size: clamp(100px, 12vw, 160px);
+  }
+}
+
+@keyframes count-bump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.13); }
+  100% { transform: scale(1); }
+}
+
+#count-number.bump { animation: count-bump 0.18s ease-out; }
+
+/* ----- Progress bar ---------------------------------------------- */
+#progress-section {
+  width: 100%;
+  max-width: 340px;
+}
+
+#progress-bar-wrap {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 7px;
+}
+
+#progress-bar {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.35s ease;
+}
+
+#target-label {
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+/* ----- Microphone level meter ------------------------------------ */
+#level-wrap {
+  width: 100%;
+  max-width: 340px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+#level-bar {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 3px;
+  width: 0%;
+  transition: width 0.04s;
+}
+
+/* ----- Settings panel -------------------------------------------- */
+#settings-panel {
+  background: rgba(0, 0, 0, 0.22);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 700px) {
+  #settings-panel { border-top: none; }
+}
+
+/* ----- Mode tabs ------------------------------------------------- */
+#mode-tabs {
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 9px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.tab-btn:hover  { color: rgba(255, 255, 255, 0.8); }
+.tab-btn.active { background: rgba(255, 255, 255, 0.2); color: #fff; }
+.tab-btn:disabled { opacity: 0.45; cursor: default; }
+
+/* ----- Mode info panels ------------------------------------------ */
+.mode-info {
+  font-size: 0.84rem;
+  opacity: 0.82;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.record-btn {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: 9px;
+  background: transparent;
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s;
+  margin-bottom: 8px;
+}
+
+.record-btn:hover  { background: rgba(255, 255, 255, 0.12); }
+.record-btn:active { background: rgba(255, 255, 255, 0.22); }
+.record-btn.has-sample { border-color: rgba(255, 255, 255, 0.9); }
+
+.sample-status      { font-size: 0.8rem; text-align: center; opacity: 0.7; }
+.sample-status.ready { color: #b8ffb8; opacity: 1; }
+
+/* ----- Setting rows --------------------------------------------- */
+.setting-row {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.setting-row label {
+  font-size: 0.84rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.88;
+}
+
+.setting-row output {
+  font-weight: 600;
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.setting-row input[type="range"] {
+  width: 100%;
+  accent-color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+}
+
+/* ----- Target input --------------------------------------------- */
+.target-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#target-input {
+  flex: 1;
+  padding: 9px 13px;
+  border: 2px solid rgba(255, 255, 255, 0.38);
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.18);
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.18s;
+}
+
+#target-input:focus       { border-color: rgba(255, 255, 255, 0.78); }
+#target-input::placeholder { color: rgba(255, 255, 255, 0.38); }
+
+/* Hide spin buttons */
+#target-input::-webkit-inner-spin-button,
+#target-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+#target-input { -moz-appearance: textfield; }
+
+.small-btn {
+  padding: 9px 13px;
+  border: 2px solid rgba(255, 255, 255, 0.38);
+  border-radius: 7px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.small-btn:hover  { background: rgba(255, 255, 255, 0.1); }
+.small-btn:active { background: rgba(255, 255, 255, 0.2); }
+
+/* ----- Action buttons ------------------------------------------- */
+#action-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.secondary-btn {
+  flex: 0 0 auto;
+  padding: 14px 20px;
+  border: 2px solid rgba(255, 255, 255, 0.48);
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.secondary-btn:hover  { background: rgba(255, 255, 255, 0.1); }
+.secondary-btn:active { background: rgba(255, 255, 255, 0.2); }
+
+.primary-btn {
+  flex: 1;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1e5c20;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+.primary-btn:hover  { background: rgba(255, 255, 255, 1); }
+.primary-btn:active { transform: scale(0.97); }
+
+.primary-btn.active {
+  background: rgba(255, 70, 70, 0.88);
+  color: #fff;
+}
+
+/* ----- Recording overlay ---------------------------------------- */
+#recording-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+#recording-box {
+  background: #1a1a1a;
+  border-radius: 18px;
+  padding: 36px 32px;
+  max-width: 300px;
+  width: 88%;
+  text-align: center;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+}
+
+#recording-timer {
+  font-size: 6rem;
+  font-weight: 900;
+  color: #ff5555;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+#recording-box p {
+  font-size: 0.95rem;
+  opacity: 0.78;
+  line-height: 1.5;
+}
+
+#rec-level-wrap {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#rec-level-bar {
+  height: 100%;
+  background: #ff5555;
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.05s;
+}
+
+.cancel-btn {
+  padding: 11px 22px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 9px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.cancel-btn:hover  { background: rgba(255, 255, 255, 0.1); }
+.cancel-btn:active { background: rgba(255, 255, 255, 0.2); }
+
+/* ----- Utility -------------------------------------------------- */
+.hidden { display: none !important; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
