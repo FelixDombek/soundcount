@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoundCount</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4caf50">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SoundCount">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ===== Header ===== -->
+    <header>
+      <h1>SoundCount</h1>
+      <div id="status" class="status-idle">
+        <span class="dot"></span>
+        <span id="status-text">Ready</span>
+      </div>
+    </header>
+
+    <!-- ===== Body (counter + settings side by side on desktop) ===== -->
+    <div id="body-layout">
+
+      <!-- ===== Counter panel ===== -->
+      <main id="counter-panel">
+        <div id="counter-section">
+          <button id="btn-dec" class="adjust-btn" aria-label="Decrease count">−</button>
+          <div id="count-display">
+            <span id="count-number">0</span>
+          </div>
+          <button id="btn-inc" class="adjust-btn" aria-label="Increase count">+</button>
+        </div>
+
+        <div id="progress-section">
+          <div id="progress-bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div id="progress-bar"></div>
+          </div>
+          <div id="target-label">No target set</div>
+        </div>
+
+        <div id="level-wrap" title="Microphone level">
+          <div id="level-bar"></div>
+        </div>
+      </main>
+
+      <!-- ===== Settings panel ===== -->
+      <section id="settings-panel">
+
+        <!-- Mode tabs -->
+        <div id="mode-tabs" role="tablist" aria-label="Detection mode">
+          <button class="tab-btn active" data-mode="generic" role="tab" aria-selected="true">Generic</button>
+          <button class="tab-btn"        data-mode="matched" role="tab" aria-selected="false">Matched</button>
+        </div>
+
+        <!-- Mode descriptions -->
+        <div id="generic-info" class="mode-info" role="tabpanel">
+          Counts any sharp, loud sound event (clap, knock, …).
+        </div>
+        <div id="matched-info" class="mode-info hidden" role="tabpanel">
+          <button id="btn-record" class="record-btn">🎙 Record Sample (3 s)</button>
+          <div id="sample-status" class="sample-status">No sample recorded yet</div>
+        </div>
+
+        <!-- Sensitivity -->
+        <div class="setting-row">
+          <label for="sensitivity">Sensitivity <output id="sensitivity-out" for="sensitivity">5</output></label>
+          <input type="range" id="sensitivity" min="1" max="10" value="5">
+        </div>
+
+        <!-- Minimum interval -->
+        <div class="setting-row">
+          <label for="cooldown">Min. interval <output id="cooldown-out" for="cooldown">500 ms</output></label>
+          <input type="range" id="cooldown" min="100" max="2000" step="50" value="500">
+        </div>
+
+        <!-- Match threshold (matched mode only) -->
+        <div class="setting-row hidden" id="similarity-row">
+          <label for="similarity">Match threshold <output id="similarity-out" for="similarity">80 %</output></label>
+          <input type="range" id="similarity" min="40" max="98" value="80">
+        </div>
+
+        <!-- Target -->
+        <div class="setting-row">
+          <label for="target-input">Target</label>
+          <div class="target-input-group">
+            <input type="number" id="target-input" min="1" max="99999" placeholder="—" inputmode="numeric">
+            <button id="btn-clear-target" class="small-btn" title="Clear target">✕</button>
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div id="action-row">
+          <button id="btn-reset" class="secondary-btn">Reset</button>
+          <button id="btn-toggle" class="primary-btn">▶ Start</button>
+        </div>
+
+      </section>
+    </div><!-- #body-layout -->
+  </div><!-- #app -->
+
+  <!-- ===== Recording overlay ===== -->
+  <div id="recording-overlay" class="hidden" role="dialog" aria-modal="true" aria-label="Recording reference sample">
+    <div id="recording-box">
+      <div id="recording-timer" aria-live="polite">3</div>
+      <p>Make the sound you want to count…</p>
+      <div id="rec-level-wrap">
+        <div id="rec-level-bar"></div>
+      </div>
+      <button id="btn-cancel-rec" class="cancel-btn">Cancel</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
