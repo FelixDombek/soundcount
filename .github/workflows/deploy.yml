@@ -6,9 +6,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  pages: write      # to deploy to GitHub Pages
+  id-token: write   # to use OIDC authentication (if needed)
 
 concurrency:
   group: pages
